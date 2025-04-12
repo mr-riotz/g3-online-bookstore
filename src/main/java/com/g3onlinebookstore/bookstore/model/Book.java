@@ -1,6 +1,7 @@
 package com.g3onlinebookstore.bookstore.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @Entity
 public class Book {
@@ -9,22 +10,27 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Title is required")
     private String title;
+
+    @NotBlank(message = "Author is required")
     private String author;
+
+    @Min(value = 0, message = "Price must be 0 or more")
     private double price;
 
-    // ✅ Default constructor (required by JPA)
+    // Default constructor (required by JPA)
     public Book() {
     }
 
-    // ✅ Constructor for seeding and testing
+    // Constructor for seeding or manual creation
     public Book(String title, String author, double price) {
         this.title = title;
         this.author = author;
         this.price = price;
     }
 
-    // ✅ Getters and setters
+    // Getters and setters
     public Long getId() {
         return id;
     }
