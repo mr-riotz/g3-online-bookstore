@@ -2,46 +2,43 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <title>G3 Online Bookstore</title>
     <link rel="stylesheet" th:href="@{/css/style.css}" />
 </head>
 <body>
+
+<!-- Auth buttons floated top-right -->
+<div class="auth-buttons">
+    <sec:authorize access="isAnonymous()">
+        <a href="/login" class="btn btn-secondary">Login</a>
+    </sec:authorize>
+
+    <sec:authorize access="isAuthenticated()">
+        <form th:action="@{/logout}" method="post" style="display:inline;">
+            <button type="submit" class="btn btn-secondary">Logout</button>
+        </form>
+    </sec:authorize>
+</div>
+
+<!-- Main content -->
 <div class="container">
 
     <h1><span style="font-size: 3rem;">📖</span> G3 Online Bookstore</h1>
     <p>Browse our curated selection or log in as admin to manage books.</p>
 
     <sec:authorize access="isAuthenticated()">
-        <p class="welcome-msg">Welcome, admin! </p>
+        <p style="color:green;">✅ You are logged in</p>
+    </sec:authorize>
+    <sec:authorize access="isAnonymous()">
+        <p style="color:red;">🔒 You are NOT logged in</p>
     </sec:authorize>
 
-    <!-- Auth buttons floated top-right -->
-    <div class="auth-buttons">
-        <sec:authorize access="isAnonymous()">
-            <a href="/login" class="btn btn-secondary">Login</a>
+    <div class="nav-buttons">
+        <a href="/books" class="btn">View Books</a>
+
+        <sec:authorize access="hasRole('ADMIN')">
+            <a href="/books/add" class="btn">Add Book</a>
         </sec:authorize>
-
-        <sec:authorize access="isAuthenticated()">
-            <form th:action="@{/logout}" method="post" style="display:inline;">
-                <button type="submit" class="btn btn-secondary">Logout</button>
-            </form>
-        </sec:authorize>
-
-    </div>
-
-    <!-- Main page content -->
-    <div class="container">
-        <h1><span style="font-size: 3rem;">📖</span> G3 Online Bookstore</h1>
-        <p>Browse our curated selection or log in as admin to manage books.</p>
-
-        <div class="nav-buttons">
-            <a href="/books" class="btn">View Books</a>
-
-            <sec:authorize access="hasRole('ADMIN')">
-                <a href="/books/add" class="btn">Add Book</a>
-            </sec:authorize>
-        </div>
     </div>
 
     <div class="featured">
@@ -53,5 +50,6 @@
         </ul>
     </div>
 </div>
+
 </body>
 </html>
